@@ -40,8 +40,31 @@ int generateAccountNumber() {
     return rand() % 900000 + 100000; // Generates a 6-digit number
 }
 
+// func to create acc
+void openNewAccount(Account *accounts, int &totalAccounts) {
+    Account newAccount;
+    cout << "Enter First Name: ";
+    cin >> newAccount.firstName;
+    cout << "Enter Last Name: ";
+    cin >> newAccount.lastName;
+    cout << "Enter Middle Name: ";
+    cin >> newAccount.middleName;
+    cout << "Enter Address: ";
+    cin.ignore();
+    getline(cin, newAccount.address);
+    cout << "Enter Birthday (MM/DD/YYYY): ";
+    cin >> newAccount.birthday;
+    cout << "Enter Gender (M/F): ";
+    cin >> newAccount.gender;
+    cout << "Enter Account Type (Savings Account or Current Account): ";
+    cin.ignore();
+    getline(cin, newAccount.accountType);
+    cout << "Enter Initial Deposit: ";
+    cin >> newAccount.initialDeposit;
+    cout << "Enter PIN (6-digit number): ";
+    cin >> newAccount.pin;
 
-
+}
 
 
 
