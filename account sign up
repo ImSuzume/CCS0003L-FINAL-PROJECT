@@ -44,11 +44,11 @@ int generateAccountNumber() {
 void openNewAccount(Account *accounts, int &totalAccounts) {
     Account newAccount;
     cout << "Enter First Name: ";
-    cin >> newAccount.firstName;
+    cin >> newAccount.FName;
     cout << "Enter Last Name: ";
-    cin >> newAccount.lastName;
+    cin >> newAccount.LName;
     cout << "Enter Middle Name: ";
-    cin >> newAccount.middleName;
+    cin >> newAccount.MName;
     cout << "Enter Address: ";
     cin.ignore();
     getline(cin, newAccount.address);
@@ -58,9 +58,9 @@ void openNewAccount(Account *accounts, int &totalAccounts) {
     cin >> newAccount.gender;
     cout << "Enter Account Type (Savings Account or Current Account): ";
     cin.ignore();
-    getline(cin, newAccount.accountType);
+    getline(cin, newAccount.AccType);
     cout << "Enter Initial Deposit: ";
-    cin >> newAccount.initialDeposit;
+    cin >> newAccount.initial;
     cout << "Enter PIN (6-digit number): ";
     cin >> newAccount.pin;
 
