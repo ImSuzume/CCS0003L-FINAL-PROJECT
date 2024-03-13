@@ -1,0 +1,69 @@
+int main() {
+    const int MAX_ACCOUNTS = 10; // Maximum number of accounts
+    Account accounts[MAX_ACCOUNTS];
+    int totalAccounts = 0;
+    int choice;
+    int accountNumber;
+    int pin;
+    bool exit = false;
+
+    while (!exit) {
+        displayMenu();
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            if (totalAccounts < MAX_ACCOUNTS) {
+                openNewAccount(accounts, totalAccounts);
+            } else {
+                cout << "Maximum number of accounts reached." << endl;
+            }
+            break;
+        case 2:
+            cout << "Enter Account Number: ";
+            cin >> accountNumber;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            balanceInquiry(accounts, totalAccounts, accountNumber, pin);
+            break;
+        case 3:
+            cout << "Enter Account Number: ";
+            cin >> accountNumber;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            deposit(accounts, totalAccounts, accountNumber, pin);
+            break;
+        case 4:
+            cout << "Enter Account Number: ";
+            cin >> accountNumber;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            withdraw(accounts, totalAccounts, accountNumber, pin);
+            break;
+        case 5:
+            cout << "Enter Account Number: ";
+            cin >> accountNumber;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            viewAccountInfo(accounts, totalAccounts, accountNumber, pin);
+            break;
+        case 6:
+            cout << "Enter Account Number: ";
+            cin >> accountNumber;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            closeAccount(accounts, totalAccounts, accountNumber, pin);
+            break;
+        case 7:
+            cout << "Thank you for using the program!" << endl;
+            exit = true;
+            break;
+        default:
+            cout << "Invalid choice. Please enter a valid option." << endl;
+            break;
+        }
+    }
+
+    return 0;
+}
