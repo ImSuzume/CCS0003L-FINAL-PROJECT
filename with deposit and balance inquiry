@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+struct Account {
+    string FName;
+    string LName;
+    string MName;
+    string address;
+    string AccType;
+    char gender;
+    float initial;
+    float current;
+    int pin;
+    int AccNum;
+};
+
+// Display menu
+void Menu() {
+    cout << "Menu Options:" << endl;
+    cout << "1. Open a New Account" << endl;
+    cout << "2. Balance Inquiry" << endl;
+    cout << "3. Deposit" << endl;
+    cout << "4. Withdraw" << endl;
+    cout << "5. View Account Information" << endl;
+    cout << "6. Close Account" << endl;
+    cout << "7. Exit Program" << endl;
+}
+
+// Generate new account number
+int generateAccountNumber() {
+    srand(time(0));
+    return rand() % 900000 + 100000; // Generates a 6-digit number
+}
+
+// Function to create account
+void openNewAccount(Account *accounts, int &totalAccounts) {
+    Account newAccount;
+    cout << "Enter First Name: ";
+    cin >> newAccount.FName;
+    cout << "Enter Last Name: ";
+    cin >> newAccount.LName;
+    cout << "Enter Middle Name: ";
+    cin >> newAccount.MName;
+    cout << "Enter Address: ";
+    cin.ignore();
+    getline(cin, newAccount.address);
+    cout << "Enter Gender (M/F): ";
+    cin >> newAccount.gender;
+    cout << "Enter Account Type (Savings Account or Current Account): ";
+    cin.ignore();
+    getline(cin, newAccount.AccType);
+    cout << "Enter Initial Deposit: ";
+    cin >> newAccount.initial;
+    cout << "Enter PIN (6-digit number): ";
+    cin >> newAccount.pin;
+}
+
+// Function to inquire balance
+void balanceInquiry(Account *accounts, int totalAccounts) {
+    int accountNumber;
+    cout << "Enter Account Number: ";
+    cin >> accountNumber;
+    // Find the account by account number
+    for (int i = 0; i < totalAccounts; ++i) {
+        if (accounts[i].AccNum == accountNumber) {
+            cout << "Current Balance: $" << accounts[i].current << endl;
+            return;
+        }
+    }
+    cout << "Account not found." << endl;
+}
+
+// Function to deposit money into an account
+void deposit(Account *accounts, int totalAccounts) {
+    int accountNumber;
+    float amount;
+    cout << "Enter Account Number: ";
+    cin >> accountNumber;
+    // Find the account by account number
+    for (int i = 0; i < totalAccounts; ++i) {
+        if (accounts[i].AccNum == accountNumber) {
+            cout << "Enter Amount to Deposit: $";
+            cin >> amount;
+            accounts[i].current += amount;
+            cout << "Deposit Successful. Current Balance: $" << accounts[i].current << endl;
+            return;
+        }
+    }
+    cout << "Account not found." << endl;
+}
