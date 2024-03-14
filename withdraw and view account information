@@ -1,0 +1,69 @@
+//to w/draw (amount) from account
+void withdraw(Account acounts[], int totalAccounts)
+{
+  int accountNumber;
+  int pin;
+  float amount;
+
+  cout << "\nEnter your account number: ";
+  cin >> accountNumber;
+
+// search for account by accountNumber
+  for (int i=0; i < totalAccounts; ++i){
+    if (accounts[i].accountNumber == accountNumber && acounts[i].pin == pin){
+      cout << "Enter the amount to withdraw: DD";
+      cin >> amount;
+
+      //validate amount
+      if (amount < 0 || amount < 300 || amount > accounts[i].currentBalance){
+              cout << "Invalid withdrawal amount. Please enter an amount less than or equal to your current balance!" << endl;
+              return;
+          }
+
+      char confirm;
+      cout << "Confirm withdrawal of DD" << amount << "? (Y/N): ";
+      cin >> confirm;
+
+      if (confirm == 'Y' || confirm == 'y'){
+        accounts[i].currentBalance -= amount;
+        cout << "\nTransaction successful. New balance: DD" << accounts[i].currentBalance << endl;
+        return;
+      }else{
+        cout <<\nWithdrawal canceled." << endl;
+        return;
+        }
+    }
+}
+
+cout << "Account not found or PIN is incorrect." << endl;
+}
+
+
+//to view account info
+void viewAccountInfo(const Account accounts[], int totalAccounts){
+    int accountNumber
+    int pin;
+
+    cout <<"\nEnter your account number: ";
+    cin >> accountNumber;
+
+    cout <<"Enter your PIN: ";
+    cin >> pin;
+
+  //search for account using account number
+  for (int i = 0; i < totalAccounts; ++i){
+    if (accounts[i].accountNumber == accountNumber && accounts[i].pin == pin){
+      cout << "\nAccount Information: " <<endl;
+      cout << "Account Holder: "<< accounts[i].firstName << " " << accounts[i].middleName << " " << accounts[i].lastName << endl;
+      cout << "Address: " << accounts[i].address << endl;
+      cout << "Birthday: " << accounts[i].birthday << endl;
+      cout << "Gender: " << accounts[i].gender << endl;
+      cout << "Account Type: " << accounts[i].accountType << endl;
+      cout << "Initial Deposit: DD" << accounts[i].initialDeposit << endl;
+      cout << "Current Balance: DD" << accounts[i].currentBalance << endl;
+      return;
+  }
+}
+
+cout << "Account not found or PIN is incorrect." << endl;
+}
