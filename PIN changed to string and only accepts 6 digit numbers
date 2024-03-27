@@ -110,7 +110,7 @@ void balanceInquiry(Account* accounts, int totalAccounts)
 }
 
 // Function to deposit money into an account
-void deposit(Account* accounts, int totalAccounts)
+void deposit(Account * accounts, int totalAccounts)
 {
     int accountNumber;
     string pin;
@@ -134,6 +134,13 @@ void deposit(Account* accounts, int totalAccounts)
         {
             cout << "Enter Amount to Deposit: $";
             cin >> amount;
+
+            // Validate deposit amount
+            if (amount < 0) {
+                cout << "Invalid deposit amount. Please enter a non-negative amount." << endl;
+                return;
+            }
+
             accounts[i].current += amount;
             cout << "Deposit Successful. Current Balance: $" << accounts[i].current << endl;
             return;
