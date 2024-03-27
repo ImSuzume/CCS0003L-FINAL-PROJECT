@@ -1,0 +1,353 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+#include <limits>
+
+using namespace std;
+
+struct Account
+{
+    string FName;
+    string LName;
+    string MName;
+    string address;
+    string AccType;
+    string birthday;
+    char gender;
+    float initial;
+    float current;
+    string pin; 
+    int AccNum;
+};
+
+// Display menu
+void Menu()
+{
+    cout << "============================================" << endl;
+    cout << "Menu Options:                             x" << endl;
+    cout << "1. Open a New Account                    x" << endl;
+    cout << "2. Balance Inquiry                      x" << endl;
+    cout << "3. Deposit                             x" << endl;
+    cout << "4. Withdraw                           x" << endl;
+    cout << "5. View Account Information          x" << endl;
+    cout << "6. Close Account                    x" << endl;
+    cout << "7. Exit Program                    x" << endl;
+    cout << "===================================\n" << endl;
+}
+
+// Generate new account number
+int generateAccountNumber()
+{
+    srand(time(0));
+    return rand() % 900000 + 100000; // Generates a 6-digit number
+}
+
+// Function to create account
+void openNewAccount(Account* accounts, int& totalAccounts)
+{
+    Account newAccount;
+    cout << "Enter First Name: ";
+    cin >> newAccount.FName;
+    cout << "Enter Last Name: ";
+    cin >> newAccount.LName;
+    cout << "Enter Middle Name: ";
+    cin >> newAccount.MName;
+    cout << "Enter Address: ";
+    cin.ignore();
+    getline(cin, newAccount.address);
+    cout << "Enter Gender (M/F): ";
+    cin >> newAccount.gender;
+    cout << "Enter Account Type (Savings Account or Current Account): ";
+    cin.ignore();
+    getline(cin, newAccount.AccType);
+    cout << "Enter Initial Deposit: ";
+    cin >> newAccount.initial;
+    newAccount.current = newAccount.initial;
+    cout << "Enter PIN (6-digit number): ";
+    cin >> newAccount.pin;
+
+    // Check if PIN is exactly 6 characters long and contains only digits
+    if (newAccount.pin.length() != 6 || newAccount.pin.find_first_not_of("0123456789") != string::npos) {
+        cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+        return;
+    }
+
+    newAccount.AccNum = generateAccountNumber();
+    cout << "Your account number is: " << newAccount.AccNum << endl;
+    accounts[totalAccounts] = newAccount;
+    ++totalAccounts;
+}
+
+// Function to inquire balance
+void balanceInquiry(Account* accounts, int totalAccounts)
+{
+    int accountNumber;
+    string pin;
+
+    cout << "\nEnter your account number: ";
+    cin >> accountNumber;
+
+    cout << "Enter your PIN: ";
+    cin >> pin;
+
+    // Check if PIN is exactly 6 characters long and contains only digits
+    if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos) {
+        cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+        return;
+    }
+
+    // Find the account by account number
+    for (int i = 0; i < totalAccounts; ++i)
+    {
+        if (accounts[i].AccNum == accountNumber && accounts[i].pin == pin)
+        {
+            cout << "Current Balance: $" << accounts[i].current << endl;
+            return;
+        }
+    }
+    cout << "Account not found." << endl;
+}
+
+// Function to deposit money into an account
+void deposit(Account* accounts, int totalAccounts)
+{
+    int accountNumber;
+    string pin;
+    float amount;
+    cout << "Enter Account Number: ";
+    cin >> accountNumber;
+
+    cout << "Enter PIN: ";
+    cin >> pin;
+
+    // Check if PIN is exactly 6 characters long and contains only digits
+    if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos) {
+        cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+        return;
+    }
+
+    // Find the account by account number
+    for (int i = 0; i < totalAccounts; ++i)
+    {
+        if (accounts[i].AccNum == accountNumber && accounts[i].pin == pin)
+        {
+            cout << "Enter Amount to Deposit: $";
+            cin >> amount;
+            accounts[i].current += amount;
+            cout << "Deposit Successful. Current Balance: $" << accounts[i].current << endl;
+            return;
+        }
+    }
+    cout << "Account not found." << endl;
+}
+
+// Function to withdraw amount from account
+void withdraw(Account accounts[], int totalAccounts)
+{
+    int accountNumber;
+    string pin;
+    float amount;
+
+    cout << "\nEnter your account number: ";
+    cin >> accountNumber;
+
+    cout << "Enter your PIN: ";
+    cin >> pin;
+
+    // Check if PIN is exactly 6 characters long and contains only digits
+    if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos) {
+        cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+        return;
+    }
+
+    // Search for the account by account number
+    for (int i = 0; i < totalAccounts; ++i)
+    {
+        if (accounts[i].AccNum == accountNumber && accounts[i].pin == pin)
+        {
+            cout << "Enter the amount to withdraw: $";
+            cin >> amount;
+
+            // Validate withdrawal amount
+            if (amount < 0 || amount > 300 || amount > accounts[i].current)
+            {
+                cout << "Invalid withdrawal amount. Please enter a positive amount less than or equal to your current balance." << endl;
+                return;
+            }
+
+            char confirm;
+            cout << "Confirm withdrawal of $" << amount << "? (Y/N): ";
+            cin >> confirm;
+
+            if (confirm == 'Y' || confirm == 'y')
+            {
+                accounts[i].current -= amount;
+                cout << "\nTransaction successful. New balance: $" << accounts[i].current << endl;
+                return;
+            }
+            else
+            {
+                cout << "\nWithdrawal canceled." << endl;
+                return;
+            }
+        }
+    }
+
+    cout << "Account not found or PIN is incorrect." << endl;
+}
+
+// Function to view account information
+void viewAccountInfo(const Account accounts[], int totalAccounts)
+{
+    int accountNumber;
+    string pin;
+
+    cout << "\nEnter your account number: ";
+    cin >> accountNumber;
+
+    cout << "Enter your PIN: ";
+    cin >> pin;
+
+    // Check if PIN is exactly 6 characters long and contains only digits
+    if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos)
+    {
+        cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+        return;
+    }
+
+    // Search for the account by account number
+    for (int i = 0; i < totalAccounts; ++i)
+    {
+        if (accounts[i].AccNum == accountNumber && accounts[i].pin == pin)
+        {
+            cout << "\nAccount Information:" << endl;
+            cout << "Account Holder: " << accounts[i].FName << " " << accounts[i].MName << " " << accounts[i].LName << endl;
+            cout << "Address: " << accounts[i].address << endl;
+            cout << "Birthday: " << accounts[i].birthday << endl;
+            cout << "Gender: " << accounts[i].gender << endl;
+            cout << "Account Type: " << accounts[i].AccType << endl;
+            cout << "Initial Deposit: $" << accounts[i].initial << endl;
+            cout << "Current Balance: $" << accounts[i].current << endl;
+            return;
+        }
+    }
+
+    cout << "Account not found or PIN is incorrect." << endl;
+}
+
+// Function to close account
+void closeAccount(Account* accounts, int& totalAccounts)
+{
+    int accountNum;
+    string pin;
+
+    cout << "\nEnter your account number: ";
+    cin >> accountNum;
+
+    // Search for the account by account number
+    for (int i = 0; i < totalAccounts; ++i)
+    {
+        if (accounts[i].AccNum == accountNum)
+        {
+            cout << "Enter your PIN: ";
+            cin >> pin;
+
+            // Check if PIN is exactly 6 characters long and contains only digits
+            if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos)
+            {
+                cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+                return;
+            }
+
+            // If the PIN matches, proceed with account deletion
+            if (accounts[i].pin == pin)
+            {
+                if (accounts[i].current == 0)
+                {
+                    // Shift remaining accounts in the array to remove the closed account
+                    for (int j = i; j < totalAccounts - 1; ++j)
+                    {
+                        accounts[j] = accounts[j + 1];
+                    }
+                    --totalAccounts;
+                    cout << "Account successfully deleted." << endl;
+                    return;
+                }
+                else
+                {
+                    cout << "You may only close an account if it has a $0 balance." << endl;
+                    return;
+                }
+            }
+            else
+            {
+                cout << "Incorrect PIN. Deletion canceled." << endl;
+                return;
+            }
+        }
+    }
+
+    cout << "Account not found." << endl;
+}
+
+int main()
+{
+    const int MAX_ACCOUNTS = 10; // Maximum number of accounts
+    Account accounts[MAX_ACCOUNTS]; // Array of accounts; max 10
+    int totalAccounts = 0;
+    int choice;
+    bool exit = false;
+
+    while (!exit)
+    {
+        Menu();
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            system("cls");
+            if (totalAccounts < MAX_ACCOUNTS)
+            {
+                openNewAccount(accounts, totalAccounts);
+            }
+            else
+            {
+                cout << "Maximum number of accounts reached." << endl;
+            }
+            break;
+        case 2:
+            system("cls");
+            balanceInquiry(accounts, totalAccounts);
+            break;
+        case 3:
+            system("cls");
+            deposit(accounts, totalAccounts);
+            break;
+        case 4:
+            system("cls");
+            withdraw(accounts, totalAccounts);
+            break;
+        case 5:
+            system("cls");
+            viewAccountInfo(accounts, totalAccounts);
+            break;
+        case 6:
+            system("cls");
+            closeAccount(accounts, totalAccounts);
+            break;
+        case 7:
+            system("cls");
+            cout << "Thank you for using the program!" << endl;
+            exit = true;
+            break;
+        default:
+            cout << "Invalid choice. Please enter a valid option." << endl;
+            break;
+        }
+    }
+    return 0;
+}
+
