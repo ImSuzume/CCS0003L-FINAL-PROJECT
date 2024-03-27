@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// Structure to store account information
 struct Account
 {
     string FName;
@@ -21,17 +22,18 @@ struct Account
     int AccNum;
 };
 
-// Display menu
+// Function to display menu
 void Menu()
 {
-	system("color 9F");
-	
-	time_t now = time(0);
-    char* dt = ctime(&now);
-	tm *gmtm = gmtime(&now);
-    dt = asctime(gmtm);
-	
-	
+    system("color 9F");
+
+    time_t now = time(0);
+    tm gmtm;
+    gmtime_s(&gmtm, &now);
+    char dt[26];
+    asctime_s(dt, sizeof(dt), &gmtm);
+
+
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb" << endl;
     cout << "\t\t\t\xdb\t\t   MENU              \t \xdb   " << endl;
     cout << "\t\t\t\xdb   1. Open a New Account             \t \xdb        " << endl;
@@ -41,28 +43,26 @@ void Menu()
     cout << "\t\t\t\xdb   5. View Account Information       \t \xdb      " << endl;
     cout << "\t\t\t\xdb   6. Close Account                   \t \xdb     " << endl;
     cout << "\t\t\t\xdb   7. Exit Program                    \t \xdb     " << endl;
-    cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+    cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
     cout << "\t\t\t\t" << dt << endl;
 }
 
-// Generate new account number
+// Function to generate a new account number
 int generateAccountNumber()
 {
     srand(time(0));
     return rand() % 900000 + 100000; // Generates a 6-digit number
 }
 
-// Function to create account
+// Function to open a new account
 void openNewAccount(Account* accounts, int& totalAccounts)
 {
     Account newAccount;
-    
-    
-    
+
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
     cout << "\t\t\t\t      ACCOUNT SIGN UP \n" << endl;
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-    
+
     cout << "\t\t\tEnter First Name: ";
     cin >> newAccount.FName;
     cout << "\t\t\tEnter Last Name: ";
@@ -74,8 +74,10 @@ void openNewAccount(Account* accounts, int& totalAccounts)
     getline(cin, newAccount.address);
     cout << "\t\t\tEnter Gender (M/F): ";
     cin >> newAccount.gender;
-    cout << "\t\t\t(Savings Account or Current Account) \n\t\t\tEnter Account Type: ";
+    cout << "\t\t\tEnter Birthday (MM/DD/YYYY): ";
     cin.ignore();
+    getline(cin, newAccount.birthday);
+    cout << "\t\t\t(Savings Account or Current Account) \n\t\t\tEnter Account Type: ";
     getline(cin, newAccount.AccType);
     cout << "\t\t\tEnter Initial Deposit: ";
     cin >> newAccount.initial;
@@ -85,7 +87,7 @@ void openNewAccount(Account* accounts, int& totalAccounts)
 
     // Check if PIN is exactly 6 characters long and contains only digits
     if (newAccount.pin.length() != 6 || newAccount.pin.find_first_not_of("0123456789") != string::npos) {
-        cout << "Invalid PIN. Please enter a 6-digit PIN." << endl;
+        cout << "\t\t\tInvalid PIN. Please enter a 6-digit PIN." << endl;
         return;
     }
 
@@ -102,13 +104,20 @@ void balanceInquiry(Account* accounts, int totalAccounts)
     int accountNumber;
     string pin;
 
-
-	cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-    cout << "\t\t\t\t      BALANCE INQUIRY \n" << endl;
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-    
-    cout << "\n\t\t\t\Enter your account number: "; 
+    cout << "\t\t\t\t      BALANCE INQUIRY \n" << endl;
+    cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+
+    cout << "\n\t\t\tEnter your account number: ";
     cin >> accountNumber;
+
+    if (cin.fail()) {
+        cout << "\t\t\tInvalid account number. Please enter a valid integer." << endl;
+        cin.clear();
+
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        return;
+    }
 
     cout << "\t\t\tEnter your PIN: ";
     cin >> pin;
@@ -137,13 +146,20 @@ void deposit(Account* accounts, int totalAccounts)
     int accountNumber;
     string pin;
     float amount;
-    
+
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
     cout << "\t\t\t\t          DEPOSIT \n" << endl;
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-  
+
     cout << "\t\t\tEnter Account Number: ";
     cin >> accountNumber;
+
+    if (cin.fail()) {
+        cout << "\t\t\tInvalid account number. Please enter a valid integer." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        return;
+    }
 
     cout << "\t\t\tEnter PIN: ";
     cin >> pin;
@@ -159,12 +175,19 @@ void deposit(Account* accounts, int totalAccounts)
     {
         if (accounts[i].AccNum == accountNumber && accounts[i].pin == pin)
         {
-        	cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-   	 		cout << "\t\t\t\t      DEPOSIT \n" << endl;
-    		cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-            
-			cout << "\t\t\tEnter Amount to Deposit: $";
+            cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+            cout << "\t\t\t\t      DEPOSIT \n" << endl;
+            cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+
+            cout << "\t\t\tEnter Amount to Deposit: $";
             cin >> amount;
+
+            if (cin.fail()) {
+                cout << "\t\t\tInvalid amount. Please enter a valid number." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+                return;
+            }
 
             // Validate deposit amount
             if (amount < 0) {
@@ -180,7 +203,6 @@ void deposit(Account* accounts, int totalAccounts)
     cout << "\t\t\tAccount not found." << endl;
 }
 
-
 // Function to withdraw amount from account
 void withdraw(Account accounts[], int totalAccounts)
 {
@@ -188,13 +210,19 @@ void withdraw(Account accounts[], int totalAccounts)
     string pin;
     float amount;
 
-	cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+    cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
     cout << "\t\t\t\t           WITHDRAW \n" << endl;
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
 
-
     cout << "\n\t\t\tEnter your account number: ";
     cin >> accountNumber;
+
+    if (cin.fail()) {
+        cout << "\t\t\tInvalid account number. Please enter a valid integer." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        return;
+    }
 
     cout << "\t\t\tEnter your PIN: ";
     cin >> pin;
@@ -213,194 +241,129 @@ void withdraw(Account accounts[], int totalAccounts)
             cout << "\t\t\tEnter the amount to withdraw: $";
             cin >> amount;
 
+            if (cin.fail()) {
+                cout << "\t\t\tInvalid amount. Please enter a valid number." << endl;
+                cin.clear();
+                cin.ignore
+                (numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+                return;
+            }
+
             // Validate withdrawal amount
-            if (amount < 0 || amount > 300 || amount > accounts[i].current)
-            {
-                cout << "\t\t\tInvalid withdrawal amount. Please enter a positive amount less than or equal to your current balance." << endl;
+            if (amount < 0) {
+                cout << "\t\t\tInvalid withdrawal amount. Please enter a non-negative amount." << endl;
+                return;
+            }
+            if (amount > accounts[i].current) {
+                cout << "\t\t\tInsufficient funds." << endl;
                 return;
             }
 
-            char confirm;
-            cout << "\t\t\tConfirm withdrawal of $" << amount << "? (Y/N): ";
-            cin >> confirm;
-
-            if (confirm == 'Y' || confirm == 'y')
-            {
-                accounts[i].current -= amount;
-                cout << "\n\t\t\tTransaction successful. New balance: $" << accounts[i].current << endl;
-                return;
-            }
-            else
-            {
-                cout << "\t\t\t\nWithdrawal canceled." << endl;
-                return;
-            }
+            // Perform withdrawal
+            accounts[i].current -= amount;
+            cout << "\t\t\tWithdrawal Successful. Current Balance: $" << accounts[i].current << endl;
+            return;
         }
     }
-
-    cout << "\t\t\tAccount not found or PIN is incorrect." << endl;
+    cout << "\t\t\tAccount not found." << endl;
 }
 
-// Function to view account information
-void viewAccountInfo(const Account accounts[], int totalAccounts)
+// Function to display account information
+void viewAccountInformation(Account accounts[], int totalAccounts)
 {
     int accountNumber;
     string pin;
 
-	cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-    cout << "\t\t\t\t    ACCOUNT INFORMATION \n" << endl;
     cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+    cout << "\t\t\t\t VIEW ACCOUNT INFORMATION \n" << endl;
+    cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
 
-
-    cout << "\n\t\t\tEnter your account number: ";
+    cout << "\t\t\tEnter Account Number: ";
     cin >> accountNumber;
 
-    cout << "\t\t\tEnter your PIN: ";
+    if (cin.fail()) {
+        cout << "\t\t\tInvalid account number. Please enter a valid integer." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        return;
+    }
+
+    cout << "\t\t\tEnter PIN: ";
     cin >> pin;
 
-    // Check if PIN is only 6 characters long and contains digits
-    if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos)
-    {
+    // Check if PIN is exactly 6 characters long and contains only digits
+    if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos) {
         cout << "\t\t\tInvalid PIN. Please enter a 6-digit PIN." << endl;
         return;
     }
 
-    // Search for the account by account number
+    // Find the account by account number
     for (int i = 0; i < totalAccounts; ++i)
     {
         if (accounts[i].AccNum == accountNumber && accounts[i].pin == pin)
         {
-            cout << "\n\t\t\tAccount Information:" << endl;
-            cout << "\t\t\tAccount Holder: " << accounts[i].FName << " " << accounts[i].MName << " " << accounts[i].LName << endl;
+            cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+            cout << "\t\t\t\tACCOUNT INFORMATION \n" << endl;
+            cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
+
+            cout << "\t\t\tFirst Name: " << accounts[i].FName << endl;
+            cout << "\t\t\tLast Name: " << accounts[i].LName << endl;
+            cout << "\t\t\tMiddle Name: " << accounts[i].MName << endl;
             cout << "\t\t\tAddress: " << accounts[i].address << endl;
-            cout << "\t\t\tBirthday: " << accounts[i].birthday << endl;
             cout << "\t\t\tGender: " << accounts[i].gender << endl;
+            cout << "\t\t\tBirthday: " << accounts[i].birthday << endl;
             cout << "\t\t\tAccount Type: " << accounts[i].AccType << endl;
-            cout << "\t\t\tInitial Deposit: $" << accounts[i].initial << endl;
+            cout << "\t\t\tAccount Number: " << accounts[i].AccNum << endl;
             cout << "\t\t\tCurrent Balance: $" << accounts[i].current << endl;
             return;
         }
     }
-
-    cout << "\t\t\tAccount not found or PIN is incorrect." << endl;
-}
-
-// Function to close account
-void closeAccount(Account* accounts, int& totalAccounts)
-{
-    int accountNum;
-    string pin;
-
-	cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-    cout << "\t\t\t\t      CLOSE ACCOUNT  \n" << endl;
-    cout << "\t\t\t\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\xdb\n" << endl;
-
-
-    cout << "\n\t\t\tEnter your account number: ";
-    cin >> accountNum;
-
-    // Search for the account by account number
-    for (int i = 0; i < totalAccounts; ++i)
-    {
-        if (accounts[i].AccNum == accountNum)
-        {
-            cout << "\t\t\tEnter your PIN: ";
-            cin >> pin;
-
-            // Check if PIN is 6 characters long and contains only digits
-            if (pin.length() != 6 || pin.find_first_not_of("0123456789") != string::npos)
-            {
-                cout << "\t\t\tInvalid PIN. Please enter a 6-digit PIN." << endl;
-                return;
-            }
-
-            // If the PIN matches, proceed with account deletion
-            if (accounts[i].pin == pin)
-            {
-                if (accounts[i].current == 0)
-                {
-                    // Shift remaining accounts in the array to remove the closed account
-                    for (int j = i; j < totalAccounts - 1; ++j)
-                    {
-                        accounts[j] = accounts[j + 1];
-                    }
-                    --totalAccounts;
-                    cout << "\t\t\tAccount successfully deleted." << endl;
-                    return;
-                }
-                else
-                {
-                    cout << "\t\t\tYou may only close an account if it has a $0 balance." << endl;
-                    return;
-                }
-            }
-            else
-            {
-                cout << "\t\t\tIncorrect PIN. Deletion canceled." << endl;
-                return;
-            }
-        }
-    }
-
     cout << "\t\t\tAccount not found." << endl;
 }
 
+// Main function
 int main()
 {
-    const int MAX_ACCOUNTS = 10; // Maximum number of accounts
-    Account accounts[MAX_ACCOUNTS]; // Array of accounts; max 10
+    const int MAX_ACCOUNTS = 100;
+    Account accounts[MAX_ACCOUNTS];
     int totalAccounts = 0;
     int choice;
-    bool exit = false;
 
-    while (!exit)
+    do
     {
         Menu();
-        cout << "\t\t\tEnter your choice: ";
+        cout << "\n\t\t\tEnter your choice: ";
         cin >> choice;
 
         switch (choice)
         {
         case 1:
-            system("cls");
-            if (totalAccounts < MAX_ACCOUNTS)
-            {
-                openNewAccount(accounts, totalAccounts);
-            }
-            else
-            {
-                cout << "\t\t\tMaximum number of accounts reached." << endl;
-            }
+            openNewAccount(accounts, totalAccounts);
             break;
         case 2:
-            system("cls");
             balanceInquiry(accounts, totalAccounts);
             break;
         case 3:
-            system("cls");
             deposit(accounts, totalAccounts);
             break;
         case 4:
-            system("cls");
             withdraw(accounts, totalAccounts);
             break;
         case 5:
-            system("cls");
-            viewAccountInfo(accounts, totalAccounts);
+            viewAccountInformation(accounts, totalAccounts);
             break;
         case 6:
-            system("cls");
-            closeAccount(accounts, totalAccounts);
+            // Add functionality to close an account
+            cout << "\t\t\tFeature not implemented yet." << endl;
             break;
         case 7:
-            system("cls");
-            cout << "\t\t\tThank you for using the program!" << endl;
-            exit = true;
+            cout << "\t\t\tExiting program..." << endl;
             break;
         default:
-            cout << "\t\t\tInvalid choice. Please enter a valid option." << endl;
+            cout << "\t\t\tInvalid choice. Please enter a number between 1 and 7." << endl;
             break;
         }
-    }
+    } while (choice != 7);
+
     return 0;
 }
